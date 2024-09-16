@@ -20,6 +20,7 @@ public class GamePanel extends JPanel implements ActionListener {
     private Timer timer;
     private boolean running;
     private ScorePanel scorePanel;
+    private JButton button;
 
     public GamePanel(ScorePanel scorePanel) {
         this.scorePanel = scorePanel;
@@ -28,6 +29,17 @@ public class GamePanel extends JPanel implements ActionListener {
         setBackground(Color.BLACK);
         setFocusable(true);
         addKeyListener(new myKeyAdapter());
+
+        button = new JButton("Restart");
+        setLayout(null);
+        button.setBounds(150, 300, 100, 40);
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startGame();
+            }
+        });
+        add(button);
 
         startGame();
     }
@@ -80,7 +92,8 @@ private void move() {
     }
 
     private void startGame() {
-        randomApple();
+        direction = 'R';
+        snakeNum = 3;
         running = true;
         for(int i=0; i<snakeNum; i++) {
             x[i] = -UNIT_SIZE;
@@ -88,8 +101,15 @@ private void move() {
         }
         x[0] = HEIGHT / 2;
         y[0] = 0;
+        randomApple();
+        if(timer != null) {
+            timer.stop();
+        }
         timer = new Timer(DELAY, this);
         timer.start();
+
+        button.setVisible(false);
+        scorePanel.setVisible(true);
     }
 
     @Override
@@ -133,10 +153,13 @@ private void move() {
     }
 
     private void gameOver(Graphics g) {
+        button.setVisible(true);
+        scorePanel.setVisible(false);
         g.setColor(Color.RED);
         g.setFont(new Font("Arial", Font.BOLD, 40));
         FontMetrics metrics = getFontMetrics(g.getFont());
         g.drawString("Game Over", (WIDTH - metrics.stringWidth("Game Over")) / 2, HEIGHT / 2);
+        g.drawString("Score : " + (snakeNum-3), (WIDTH - metrics.stringWidth("Score :" + (snakeNum-3))) / 2, HEIGHT / 2 + 40);
     }
 
     private class myKeyAdapter extends KeyAdapter {
