@@ -51,8 +51,6 @@ public class GamePanel extends JPanel implements ActionListener {
 
         add(restartButton);
         add(exitButton);
-
-        startGame();
     }
 
     @Override
@@ -102,7 +100,7 @@ private void move() {
         }
     }
 
-    private void startGame() {
+    public void startGame() {
         direction = 'R';
         snakeNum = 3;
         running = true;
@@ -118,10 +116,10 @@ private void move() {
         }
         timer = new Timer(DELAY, this);
         timer.start();
-
         restartButton.setVisible(false);
         exitButton.setVisible(false);
         scorePanel.setVisible(true);
+        requestFocusInWindow();
     }
 
     @Override
