@@ -20,7 +20,8 @@ public class GamePanel extends JPanel implements ActionListener {
     private Timer timer;
     private boolean running;
     private ScorePanel scorePanel;
-    private JButton button;
+    private JButton restartButton;
+    private JButton exitButton;
 
     public GamePanel(ScorePanel scorePanel) {
         this.scorePanel = scorePanel;
@@ -30,16 +31,26 @@ public class GamePanel extends JPanel implements ActionListener {
         setFocusable(true);
         addKeyListener(new myKeyAdapter());
 
-        button = new JButton("Restart");
         setLayout(null);
-        button.setBounds(150, 300, 100, 40);
-        button.addActionListener(new ActionListener() {
+        restartButton = new JButton("Restart");
+        restartButton.setBounds(90, 300, 100, 40);
+        restartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 startGame();
             }
         });
-        add(button);
+        exitButton = new JButton("Exit");
+        exitButton.setBounds(210, 300, 100, 40);
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
+        add(restartButton);
+        add(exitButton);
 
         startGame();
     }
@@ -108,7 +119,8 @@ private void move() {
         timer = new Timer(DELAY, this);
         timer.start();
 
-        button.setVisible(false);
+        restartButton.setVisible(false);
+        exitButton.setVisible(false);
         scorePanel.setVisible(true);
     }
 
@@ -153,13 +165,15 @@ private void move() {
     }
 
     private void gameOver(Graphics g) {
-        button.setVisible(true);
-        scorePanel.setVisible(false);
         g.setColor(Color.RED);
         g.setFont(new Font("Arial", Font.BOLD, 40));
         FontMetrics metrics = getFontMetrics(g.getFont());
         g.drawString("Game Over", (WIDTH - metrics.stringWidth("Game Over")) / 2, HEIGHT / 2);
         g.drawString("Score : " + (snakeNum-3), (WIDTH - metrics.stringWidth("Score :" + (snakeNum-3))) / 2, HEIGHT / 2 + 40);
+
+        restartButton.setVisible(true);
+        exitButton.setVisible(true);
+        scorePanel.setVisible(false);
     }
 
     private class myKeyAdapter extends KeyAdapter {
