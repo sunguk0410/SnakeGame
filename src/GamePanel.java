@@ -101,8 +101,9 @@ private void move() {
     }
 
     public void startGame() {
-        direction = 'R';
         snakeNum = 3;
+        scorePanel.updateScore(0);
+        direction = 'R';
         running = true;
         for(int i=0; i<snakeNum; i++) {
             x[i] = -UNIT_SIZE;
